@@ -10,7 +10,9 @@ Source1:	%{name}.conf
 Source2:	%{name}.init
 Patch0:		%{name}-DESTDIR.patch
 URL:		http://www.mcknight.de/jftpgw/
-BuildRequires(post,preun):	/sbin/chkconfig
+Requires(post,preun):	/sbin/chkconfig
+Requires(preun):	/usr/sbin/useradd
+Requires(postun):	/usr/sbin/userdel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/%{name}
@@ -42,22 +44,42 @@ sytuacji na przesy³anie plików na i z zewn±trz sieci lokalnej.
 rm -rf $RPM_BUILD_ROOT
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
-install -d $RPM_BUILD_ROOT/var/log/
+install -d $RPM_BUILD_ROOT/var/log/jftpgw/
 install -d $RPM_BUILD_ROOT/var/run/jftpgw/
 install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/jftpgw.conf
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/jftpgw
-touch $RPM_BUILD_ROOT/var/log/jftpgw.log
+touch $RPM_BUILD_ROOT/var/log/jftpgw/jftpgw.log
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%pre
+if [ -n "`id -u jftpgw 2>/dev/null`" ]; then
+        if [ "`id -u jftpgw`" != "27" ]; then
+		echo "Error: user jftpgw doesn't have uid=27. Correct this before installing jftpgw." 1>&2            
+		exit 1
+	fi
+	else    
+		/usr/sbin/useradd -M -o -r -u 27 -s /bin/false \
+		-g nobody -c "jftpgw ftp proxy daemon" -d /tmp jftpgw 1>&2 || :
+	fi
 
 %post
 /sbin/chkconfig --add jftpgw
 
 %preun
 if [ "$1" = "0" ]; then
+	if [ -f /var/run/jftpgw/jftpgw.pid ]; then
+                /etc/rc.d/init.d/jftpgw stop >&2
+	fi
 	/sbin/chkconfig --del jftpgw
 fi
+
+%postun
+if [ "$1" = "0" ]; then
+	/usr/sbin/userdel jftpgw
+fi
+
 
 %files
 %defattr(644,root,root,755)
@@ -66,6 +88,5 @@ fi
 %dir %{_sysconfdir}
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/*
 %{_mandir}/man1/*
-# TODO: nobody cannot own any files!
-#%attr(644,nobody,nobody) /var/log/jftpgw.log
-#%attr(755,nobody,nobody) /var/run/jftpgw/
+%attr(644,jftpgw,root) /var/log/jftpgw/jftpgw.log
+%attr(755,jftpgw,root) /var/run/jftpgw/
