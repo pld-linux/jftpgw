@@ -27,7 +27,7 @@ solutions to transfer files to and from the outside of the LAN.
 
 %description -l pl
 jftpgw jest proxy/bramk± FTP, u¿ywaj±c± protoko³u FTP (w
-przeciwieñtwie do tych proxy FTP, które ¶ci±gaj± pliki po FTP, ale
+przeciwieñstwie do tych proxy FTP, które ¶ci±gaj± pliki po FTP, ale
 dzia³aj± jako proxy HTTP). Mo¿na u¿ywaæ jej, aby udostêpniæ serwery za
 firewallem/maskarad±, albo ¿eby pozwoliæ u¿ytkownikom w podobnej
 sytuacji na przesy³anie plików na i z zewn±trz sieci lokalnej.
