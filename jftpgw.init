@@ -17,40 +17,47 @@
 . /etc/sysconfig/network
 
 # Check that networking is up.
-if is_no "${NETWORKING}"; then
-        # nls "ERROR: Networking is down. %s can't be run." <service>
-        msg_network_down jftpgw
-        exit 1
+if is_yes "${NETWORKING}"; then
+	if [ ! -f /var/lock/subsys/network ]; then
+		# nls "ERROR: Networking is down. %s can't be run." <service>
+		msg_network_down jftpgw
+		exit 1
+	fi
+else
+	exit 0
 fi
 
 # See how we were called.
 case "$1" in
   start)
 	# Check if the service is already running?
-        if [ ! -f /var/run/jftpgw/jftpgw.pid ]; then
+	if [ ! -f /var/run/jftpgw/jftpgw.pid ]; then
 		msg_starting jftpgw
 		daemon jftpgw
 	else
-        	msg_already_running jftpgw
-	        exit 1
+		msg_already_running jftpgw
+		exit 1
 	fi
 	;;
   stop)
-        # Stop daemons.
+	# Stop daemons.
 	if [ -f /var/run/jftpgw/jftpgw.pid ]; then
-                msg_stopping jftpgw
-                killproc jftpgw
-        else
+		msg_stopping jftpgw
+		killproc jftpgw
+	else
 		msg_not_running jftpgw
-	        exit 1
+		exit 1
 	fi
+	;;
+  status)
+	status jftpgw
 	;;
   restart|reload)
 	$0 stop
 	$0 start
 	;;
   *)
-	msg_usage "$0 {start|stop|restart}"
+	msg_usage "$0 {start|stop|restart|reload|status}"
 	exit 1
 	;;
 esac
