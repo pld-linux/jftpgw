@@ -1,15 +1,14 @@
 Summary:	FTP proxy/gateway that uses the FTP protocol
 Summary(pl):	Proxy/bramka FTP u¿ywaj±ca protoko³u FTP
 Name:		jftpgw
-Version:	0.13.1
+Version:	0.13.4
 Release:	1
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://www.mcknight.de/jftpgw/%{name}-%{version}.tar.gz
-# Source0-md5:	9546400895b5fe54ad70dbb33f83c6a1
+# Source0-md5:	75c8be9742d21c2f2028ad581066a8e5
 Source1:	%{name}.conf
 Source2:	%{name}.init
-Patch0:		%{name}-DESTDIR.patch
 URL:		http://www.mcknight.de/jftpgw/
 Requires(pre): /bin/id
 Requires(pre): /usr/sbin/useradd
@@ -35,7 +34,6 @@ sytuacji na przesy³anie plików na i z zewn±trz sieci lokalnej.
 
 %prep
 %setup -q
-%patch0 -p1
 
 %build
 %configure2_13 \
@@ -87,7 +85,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/*
+%attr(755,root,root) %{_sbindir}/*
 %attr(754,root,root) /etc/rc.d/init.d/jftpgw
 %dir %{_sysconfdir}
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/*
