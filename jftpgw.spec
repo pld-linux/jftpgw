@@ -6,6 +6,7 @@ Release:	1
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://www.mcknight.de/jftpgw/%{name}-%{version}.tar.gz
+# Source0-md5:	9546400895b5fe54ad70dbb33f83c6a1
 Source1:	%{name}.conf
 Source2:	%{name}.init
 Patch0:		%{name}-DESTDIR.patch
