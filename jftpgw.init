@@ -27,39 +27,42 @@ else
 	exit 0
 fi
 
+
 # See how we were called.
 case "$1" in
   start)
 	# Check if the service is already running?
-	if [ ! -f /var/run/jftpgw/jftpgw.pid ]; then
+	if [ ! -f /var/lock/subsys/jftpgw ]; then
 		msg_starting jftpgw
 		daemon jftpgw
+		RETVAL=$?
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/jftpgw
 	else
 		msg_already_running jftpgw
-		exit 1
 	fi
 	;;
   stop)
 	# Stop daemons.
-	if [ -f /var/run/jftpgw/jftpgw.pid ]; then
+	if [ -f /var/lock/subsys/jftpgw ]; then
 		msg_stopping jftpgw
 		killproc jftpgw
 	else
 		msg_not_running jftpgw
-		exit 1
 	fi
+	rm -f /var/lock/subsys/jftpgw /var/run/jftpgw/jftpgw.pid >/dev/null 2>&1
 	;;
   status)
 	status jftpgw
+	exit $?
 	;;
-  restart|reload)
+  restart|force-reload)
 	$0 stop
 	$0 start
+	exit $?
 	;;
   *)
-	msg_usage "$0 {start|stop|restart|reload|status}"
-	exit 1
-	;;
+	msg_usage "$0 {start|stop|restart|force-reload|status}"
+	exit 3
 esac
 
-exit 0
+exit $RETVAL
