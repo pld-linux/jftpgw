@@ -10,7 +10,9 @@ Source1:	%{name}.conf
 Source2:	%{name}.init
 Patch0:		%{name}-DESTDIR.patch
 URL:		http://www.mcknight.de/jftpgw/
-Requires(pre):	user-jftpgw
+Requires(pre): /bin/id
+Requires(pre): /usr/sbin/useradd
+Requires(postun):      /usr/sbin/userdel
 Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -52,6 +54,17 @@ touch $RPM_BUILD_ROOT/var/log/jftpgw/jftpgw.log
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%pre
+if [ -n "`id -u jftpgw 2>/dev/null`" ]; then
+	if [ "`id -u jftpgw`" != "27" ]; then
+               echo "Error: user jftpgw doesn't have uid=27. Correct this before installing jftpgw." 1>&2
+               exit 1
+	fi
+else
+               /usr/sbin/useradd -M -o -r -u 27 -s /bin/false \
+               -g nobody -c "jftpgw ftp proxy daemon" -d /tmp jftpgw 1>&2 || :
+fi
+
 %post
 /sbin/chkconfig --add jftpgw
 if [ -f /var/run/jftpgw/jftpgw.pid ]; then
@@ -64,6 +77,11 @@ if [ "$1" = "0" ]; then
                 /etc/rc.d/init.d/jftpgw stop >&2
 	fi
 	/sbin/chkconfig --del jftpgw
+fi
+
+%postun
+if [ "$1" = "0" ]; then
+       /usr/sbin/userdel jftpgw
 fi
 
 %files
