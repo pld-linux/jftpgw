@@ -1,0 +1,58 @@
+#!/bin/sh
+#
+# jftpgw	FTP proxy/gateway
+#
+# chkconfig:	345 85 15
+# description:	FTP proxy/gateway
+#
+# processname:	jftpgw
+# pidfile:	/var/run/jftpgw.pid
+# config:	/etc/run/jftpgw/jftpgw.conf
+
+
+# Source function library
+. /etc/rc.d/init.d/functions
+
+# Get network config
+. /etc/sysconfig/network
+
+# Check that networking is up.
+if is_no "${NETWORKING}"; then
+        # nls "ERROR: Networking is down. %s can't be run." <service>
+        msg_network_down jftpgw
+        exit 1
+fi
+
+# See how we were called.
+case "$1" in
+  start)
+	# Check if the service is already running?
+        if [ ! -f /var/run/jftpgw/jftpgw.pid ]; then
+		msg_starting jftpgw
+		daemon jftpgw
+	else
+        	msg_already_running jftpgw
+	        exit 1
+	fi
+	;;
+  stop)
+        # Stop daemons.
+	if [ -f /var/run/jftpgw/jftpgw.pid ]; then
+                msg_stopping jftpgw
+                killproc jftpgw
+        else
+		msg_not_running jftpgw
+	        exit 1
+	fi
+	;;
+  restart|reload)
+	$0 stop
+	$0 start
+	;;
+  *)
+	msg_usage "$0 {start|stop|restart}"
+	exit 1
+	;;
+esac
+
+exit 0
