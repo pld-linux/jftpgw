@@ -10,10 +10,12 @@ Source0:	http://www.mcknight.de/jftpgw/%{name}-%{version}.tar.gz
 Source1:	%{name}.conf
 Source2:	%{name}.init
 URL:		http://www.mcknight.de/jftpgw/
+BuildRequires:	rpmbuild(macros) >= 1.159
 Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/useradd
 Requires(postun):	/usr/sbin/userdel
 Requires(post,preun):	/sbin/chkconfig
+Provides:	user(jftpgw)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/%{name}
@@ -54,14 +56,14 @@ touch $RPM_BUILD_ROOT/var/log/jftpgw/jftpgw.log
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ -n "`id -u jftpgw 2>/dev/null`" ]; then
-	if [ "`id -u jftpgw`" != "27" ]; then
+if [ -n "`/bin/id -u jftpgw 2>/dev/null`" ]; then
+	if [ "`/bin/id -u jftpgw`" != 27 ]; then
 		echo "Error: user jftpgw doesn't have uid=27. Correct this before installing jftpgw." 1>&2
 		exit 1
 	fi
 else
-	/usr/sbin/useradd -M -o -r -u 27 -s /bin/false \
-		-g nobody -c "jftpgw ftp proxy daemon" -d /tmp jftpgw 1>&2 || :
+	/usr/sbin/useradd -u 27 -s /bin/false \
+		-g nobody -c "jftpgw ftp proxy daemon" -d /tmp jftpgw 1>&2
 fi
 
 %post
@@ -80,7 +82,7 @@ fi
 
 %postun
 if [ "$1" = "0" ]; then
-	/usr/sbin/userdel jftpgw
+	%userremove jftpgw
 fi
 
 %files
