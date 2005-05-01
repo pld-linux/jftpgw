@@ -10,7 +10,7 @@ Source0:	http://www.mcknight.de/jftpgw/%{name}-%{version}.tar.gz
 Source1:	%{name}.conf
 Source2:	%{name}.init
 URL:		http://www.mcknight.de/jftpgw/
-BuildRequires:	rpmbuild(macros) >= 1.159
+BuildRequires:	rpmbuild(macros) >= 1.202
 Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/useradd
 Requires(postun):	/usr/sbin/userdel
@@ -56,15 +56,7 @@ touch $RPM_BUILD_ROOT/var/log/jftpgw/jftpgw.log
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ -n "`/bin/id -u jftpgw 2>/dev/null`" ]; then
-	if [ "`/bin/id -u jftpgw`" != 27 ]; then
-		echo "Error: user jftpgw doesn't have uid=27. Correct this before installing jftpgw." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/useradd -u 27 -s /bin/false \
-		-g nobody -c "jftpgw ftp proxy daemon" -d /tmp jftpgw 1>&2
-fi
+%useradd -u 27 -s /bin/false -g nobody -c "jftpgw ftp proxy daemon" -d /tmp jftpgw
 
 %post
 /sbin/chkconfig --add jftpgw
