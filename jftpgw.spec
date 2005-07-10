@@ -44,10 +44,11 @@ sytuacji na przesy³anie plików na i z zewn±trz sieci lokalnej.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-%{__make} install DESTDIR=$RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
-install -d $RPM_BUILD_ROOT/var/log/jftpgw/
-install -d $RPM_BUILD_ROOT/var/run/jftpgw/
+install -d $RPM_BUILD_ROOT{/etc/rc.d/init.d,/var/{log,run}/jftpgw}
+
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
+
 install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/jftpgw.conf
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/jftpgw
 touch $RPM_BUILD_ROOT/var/log/jftpgw/jftpgw.log
