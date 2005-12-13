@@ -11,10 +11,10 @@ Source1:	%{name}.conf
 Source2:	%{name}.init
 URL:		http://www.mcknight.de/jftpgw/
 BuildRequires:	rpmbuild(macros) >= 1.202
+Requires(post,preun):	/sbin/chkconfig
+Requires(postun):	/usr/sbin/userdel
 Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/useradd
-Requires(postun):	/usr/sbin/userdel
-Requires(post,preun):	/sbin/chkconfig
 Provides:	user(jftpgw)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -84,7 +84,7 @@ fi
 %attr(755,root,root) %{_sbindir}/*
 %attr(754,root,root) /etc/rc.d/init.d/jftpgw
 %dir %{_sysconfdir}
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/*
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*
 %{_mandir}/man1/*
 %dir /var/log/jftpgw
 %attr(644,jftpgw,root) /var/log/jftpgw/jftpgw.log
