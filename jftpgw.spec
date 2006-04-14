@@ -2,7 +2,7 @@ Summary:	FTP proxy/gateway that uses the FTP protocol
 Summary(pl):	Proxy/bramka FTP u¿ywaj±ca protoko³u FTP
 Name:		jftpgw
 Version:	0.13.5
-Release:	2
+Release:	3
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://www.mcknight.de/jftpgw/%{name}-%{version}.tar.gz
