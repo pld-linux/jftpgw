@@ -1,5 +1,5 @@
 Summary:	FTP proxy/gateway that uses the FTP protocol
-Summary(pl):	Proxy/bramka FTP u¿ywaj±ca protoko³u FTP
+Summary(pl.UTF-8):   Proxy/bramka FTP uÅ¼ywajÄ…ca protokoÅ‚u FTP
 Name:		jftpgw
 Version:	0.13.5
 Release:	4
@@ -27,12 +27,12 @@ You can use it to make servers behind a firewall/NAT server
 (masquerading server) accessible or to allow users behind such
 solutions to transfer files to and from the outside of the LAN.
 
-%description -l pl
-jftpgw jest proxy/bramk± FTP, u¿ywaj±c± protoko³u FTP (w
-przeciwieñstwie do tych proxy FTP, które ¶ci±gaj± pliki po FTP, ale
-dzia³aj± jako proxy HTTP). Mo¿na u¿ywaæ jej, aby udostêpniæ serwery za
-firewallem/maskarad±, albo ¿eby pozwoliæ u¿ytkownikom w podobnej
-sytuacji na przesy³anie plików na i z zewn±trz sieci lokalnej.
+%description -l pl.UTF-8
+jftpgw jest proxy/bramkÄ… FTP, uÅ¼ywajÄ…cÄ… protokoÅ‚u FTP (w
+przeciwieÅ„stwie do tych proxy FTP, ktÃ³re Å›ciÄ…gajÄ… pliki po FTP, ale
+dziaÅ‚ajÄ… jako proxy HTTP). MoÅ¼na uÅ¼ywaÄ‡ jej, aby udostÄ™pniÄ‡ serwery za
+firewallem/maskaradÄ…, albo Å¼eby pozwoliÄ‡ uÅ¼ytkownikom w podobnej
+sytuacji na przesyÅ‚anie plikÃ³w na i z zewnÄ…trz sieci lokalnej.
 
 %prep
 %setup -q
