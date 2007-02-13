@@ -1,5 +1,5 @@
 Summary:	FTP proxy/gateway that uses the FTP protocol
-Summary(pl.UTF-8):   Proxy/bramka FTP używająca protokołu FTP
+Summary(pl.UTF-8):	Proxy/bramka FTP używająca protokołu FTP
 Name:		jftpgw
 Version:	0.13.5
 Release:	4
